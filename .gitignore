@@ -1,0 +1,105 @@
+# Data files
+*.parquet
+*.parquet.brotli
+*.parquet.gzip
+*.parquet.snappy
+*.parquet.lz4
+*.csv
+*.xlsx
+*.xls
+*.json
+*.pickle
+*.pkl
+*.feather
+*.h5
+*.hdf5
+data/
+datasets/
+raw_data/
+processed_data/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDE & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.sublime-project
+.sublime-workspace
+*.code-workspace
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+*.nb.html
+.jupyter/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Linting & Formatting
+.flake8
+.pylintrc
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.bak
+*.backup
+*~
+
+# Model files (if applicable)
+*.pkl
+*.joblib
+*.model
+*.h5
+*.pt
+*.pth

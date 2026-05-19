@@ -1,0 +1,61 @@
+# Git
+.git
+.gitignore
+
+# Docker
+unwanted/Dockerfile
+docker-compose.yaml
+.dockerignore
+
+# DevContainer
+.devcontainer/
+
+# VS Code
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.toast
+.pytest_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+*.egg-info/
+.installed.cfg
+*.egg
+*.manifest
+*.spec
+
+# Jupyter
+.ipynb_checkpoints
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data and Artifacts
+data/
+data.zip
+*.csv
+*.parquet
+*.json
+spark-warehouse/
+metastore_db/
+derby.log
+
+# Documentation and meta
+README.md
+Readme.md
+Assignment_details.md
+submission-guidelines.txt
+ReferenceLabs/

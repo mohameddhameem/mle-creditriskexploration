@@ -21,8 +21,8 @@ _MODE_TRIPLICATE_COLS = [
 ]
 
 _FLAG_DOCUMENT_DROP = [
-    "FLAG_DOCUMENT_2",  "FLAG_DOCUMENT_4",  "FLAG_DOCUMENT_5",
-    "FLAG_DOCUMENT_7",  "FLAG_DOCUMENT_9",  "FLAG_DOCUMENT_10",
+    "FLAG_DOCUMENT_2", "FLAG_DOCUMENT_4", "FLAG_DOCUMENT_5",
+    "FLAG_DOCUMENT_7", "FLAG_DOCUMENT_9", "FLAG_DOCUMENT_10",
     "FLAG_DOCUMENT_11", "FLAG_DOCUMENT_12", "FLAG_DOCUMENT_13",
     "FLAG_DOCUMENT_14", "FLAG_DOCUMENT_15", "FLAG_DOCUMENT_16",
     "FLAG_DOCUMENT_17", "FLAG_DOCUMENT_18", "FLAG_DOCUMENT_19",
@@ -35,14 +35,16 @@ _ZERO_VARIANCE_FLAGS = [
 ]
 
 _APPLICATION_DROP_COLS = (
-    _MEDI_COLS
-    + _MODE_TRIPLICATE_COLS
-    + _FLAG_DOCUMENT_DROP
-    + _ZERO_VARIANCE_FLAGS
+        _MEDI_COLS
+        + _MODE_TRIPLICATE_COLS
+        + _FLAG_DOCUMENT_DROP
+        + _ZERO_VARIANCE_FLAGS
 )
+
 
 def _silver_path(silver_dir: str, table_name: str) -> str:
     return os.path.join(silver_dir, table_name)
+
 
 def _cast_days_columns(df: DataFrame) -> DataFrame:
     """Casts DAYS_* columns to IntegerType."""
@@ -50,6 +52,7 @@ def _cast_days_columns(df: DataFrame) -> DataFrame:
     for col in days_cols:
         df = df.withColumn(col, F.col(col).cast(IntegerType()))
     return df
+
 
 def _silver_application(df: DataFrame) -> DataFrame:
     """Cleans the application table."""
@@ -70,41 +73,48 @@ def _silver_application(df: DataFrame) -> DataFrame:
 
     return df
 
+
 def _silver_bureau(df: DataFrame) -> DataFrame:
     """Cleans the bureau table."""
     df = _cast_days_columns(df)
     return df
+
 
 def _silver_bureau_balance(df: DataFrame) -> DataFrame:
     """Cleans the bureau_balance table."""
     df = df.withColumn("MONTHS_BALANCE", F.col("MONTHS_BALANCE").cast(IntegerType()))
     return df
 
+
 def _silver_previous_app(df: DataFrame) -> DataFrame:
     """Cleans the previous_application table."""
     df = _cast_days_columns(df)
     return df
+
 
 def _silver_pos_cash(df: DataFrame) -> DataFrame:
     """Cleans the POS_CASH_balance table."""
     df = df.withColumn("MONTHS_BALANCE", F.col("MONTHS_BALANCE").cast(IntegerType()))
     return df
 
+
 def _silver_installments(df: DataFrame) -> DataFrame:
     """Cleans the installments_payments table."""
     df = _cast_days_columns(df)
     return df
+
 
 def _silver_credit_card(df: DataFrame) -> DataFrame:
     """Cleans the credit_card_balance table."""
     df = df.withColumn("MONTHS_BALANCE", F.col("MONTHS_BALANCE").cast(IntegerType()))
     return df
 
+
 def process_silver_table(
-    spark: SparkSession,
-    table_name: str,
-    bronze_dir: str,
-    silver_dir: str,
+        spark: SparkSession,
+        table_name: str,
+        bronze_dir: str,
+        silver_dir: str,
 ) -> int:
     """Reads a Bronze Parquet, applies Silver transforms, and writes a Silver Parquet."""
     bronze_path = os.path.join(bronze_dir, table_name)
@@ -130,6 +140,7 @@ def process_silver_table(
     df.write.mode("overwrite").parquet(out_path)
 
     return row_count
+
 
 def run_silver_layer(spark: SparkSession, bronze_dir: str, silver_dir: str) -> dict:
     """Processes all Bronze tables into Silver."""

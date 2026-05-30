@@ -8,6 +8,7 @@
 import os
 import logging
 from pyspark.sql import SparkSession
+import config
 
 logger = logging.getLogger(__name__)
 
@@ -19,18 +20,18 @@ def _bronze_path(bronze_dir: str, table_name: str) -> str:
 def process_bronze_table(
     spark: SparkSession,
     table_name: str,
-    csv_path: str,
+    source_path: str,
     bronze_dir: str,
     primary_key: str | None = None,
 ) -> int:
     """
-    Read a raw CSV and write it as Parquet to the Bronze layer.
+    Read a raw source file and write it as Parquet to the Bronze layer.
 
     Parameters
     ----------
     spark        : active SparkSession
     table_name   : logical name used as the output sub-directory
-    csv_path     : absolute path to the source CSV file
+    source_path  : absolute path to the source Parquet file
     bronze_dir   : root Bronze output directory (data/bronze/)
     primary_key  : column name to validate for nulls (optional)
 
@@ -38,16 +39,9 @@ def process_bronze_table(
     -------
     Row count of the written Parquet.
     """
-    logger.info(f"[Bronze] Reading {table_name} from {csv_path}")
+    logger.info(f"[Bronze] Reading {table_name} from {source_path}")
 
-    df = (
-        spark.read
-        .option("header", "true")
-        .option("inferSchema", "true")
-        .option("multiLine", "true")
-        .option("escape", '"')
-        .csv(csv_path)
-    )
+    df = spark.read.parquet(source_path)
 
     row_count = df.count()
     col_count = len(df.columns)
@@ -55,7 +49,7 @@ def process_bronze_table(
 
     # --- Validation 1: non-empty ---
     if row_count == 0:
-        raise ValueError(f"[Bronze] {table_name}: source CSV is empty — aborting.")
+        raise ValueError(f"[Bronze] {table_name}: source file is empty — aborting.")
 
     # --- Validation 2: primary key nulls ---
     if primary_key:
@@ -85,7 +79,6 @@ def run_bronze_layer(spark: SparkSession, data_dir: str, bronze_dir: str) -> dic
 
     Returns a dict of {table_name: row_count} for downstream logging.
     """
-    import config
     RAW_FILES = config.RAW_FILES
 
     # Primary keys per table (None = no PK validation)
@@ -101,16 +94,16 @@ def run_bronze_layer(spark: SparkSession, data_dir: str, bronze_dir: str) -> dic
 
     results = {}
     for table_name, filename in RAW_FILES.items():
-        csv_path = os.path.join(data_dir, filename)
-        if not os.path.exists(csv_path):
+        source_path = os.path.join(data_dir, filename)
+        if not os.path.exists(source_path):
             raise FileNotFoundError(
-                f"[Bronze] Expected file not found: {csv_path}\n"
-                f"Ensure all 7 CSVs are present in {data_dir}"
+                f"[Bronze] Expected file not found: {source_path}\n"
+                f"Ensure all 7 Parquet files are present in {data_dir}"
             )
         results[table_name] = process_bronze_table(
             spark=spark,
             table_name=table_name,
-            csv_path=csv_path,
+            source_path=source_path,
             bronze_dir=bronze_dir,
             primary_key=primary_keys[table_name],
         )

@@ -27,13 +27,13 @@ GOLD_DIR   = os.path.join(_REPO_ROOT, "datamart", "gold")
 # Source file names
 # ---------------------------------------------------------------------------
 RAW_FILES = {
-    "application":    "application_train_dated.csv",
-    "bureau":         "bureau.csv",
-    "bureau_balance": "bureau_balance.csv",
-    "previous_app":   "previous_application.csv",
-    "pos_cash":       "POS_CASH_balance.csv",
-    "installments":   "installments_payments.csv",
-    "credit_card":    "credit_card_balance.csv",
+    "application":    "application_train.parquet",
+    "bureau":         "bureau.parquet",
+    "bureau_balance": "bureau_balance.parquet",
+    "previous_app":   "previous_application.parquet",
+    "pos_cash":       "POS_CASH_balance.parquet",
+    "installments":   "installments_payments.parquet",
+    "credit_card":    "credit_card_balance.parquet",
 }
 
 # ---------------------------------------------------------------------------

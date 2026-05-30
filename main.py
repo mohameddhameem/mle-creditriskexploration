@@ -13,8 +13,10 @@ import utils.data_processing_silver_table
 # Uncomment the two lines below — download_dataset.py will populate data/
 # automatically. No other changes needed in this file, config.py, or the utils.
 # ---------------------------------------------------------------------------
-# import download_dataset
-# download_dataset.download_dataset(output_dir="data")
+import download_dataset
+
+# Download files from HuggingFace into the canonical data directory
+download_dataset.download_dataset(output_dir=config.DATA_DIR)
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -59,6 +61,15 @@ if __name__ == "__main__":
     os.makedirs(config.BRONZE_DIR, exist_ok=True)
     os.makedirs(config.SILVER_DIR, exist_ok=True)
     os.makedirs(config.GOLD_DIR, exist_ok=True)
+
+    # Pre-ingest validation: ensure all expected RAW_FILES are present in DATA_DIR
+    missing = [f for f in config.RAW_FILES.values() if not os.path.exists(os.path.join(config.DATA_DIR, f))]
+    if missing:
+        logger.error(
+            f"Missing expected source CSV files in {config.DATA_DIR}: {missing}\n"
+            "If you intended to download from HuggingFace, ensure internet access and retry."
+        )
+        sys.exit(2)
 
     # --- Bronze layer ---
     logger.info("\n[Pipeline] Starting Bronze layer...")

@@ -8,6 +8,7 @@
 import os
 import logging
 from pyspark.sql import SparkSession
+import config
 
 logger = logging.getLogger(__name__)
 
@@ -85,7 +86,6 @@ def run_bronze_layer(spark: SparkSession, data_dir: str, bronze_dir: str) -> dic
 
     Returns a dict of {table_name: row_count} for downstream logging.
     """
-    import config
     RAW_FILES = config.RAW_FILES
 
     # Primary keys per table (None = no PK validation)

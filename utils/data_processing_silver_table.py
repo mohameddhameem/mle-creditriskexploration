@@ -23,6 +23,7 @@ import logging
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql import functions as F
 from pyspark.sql.types import DateType, IntegerType
+import config
 
 # ---------------------------------------------------------------------------
 # Silver layer constants — application table
@@ -227,7 +228,6 @@ def run_silver_layer(spark: SparkSession, bronze_dir: str, silver_dir: str) -> d
 
     Returns a dict of {table_name: row_count}.
     """
-    import config
     RAW_FILES = config.RAW_FILES
 
     results = {}

@@ -7,6 +7,7 @@ import pyspark
 import config
 import utils.data_processing_bronze_table
 import utils.data_processing_silver_table
+import utils.data_processing_gold_table
 
 # ---------------------------------------------------------------------------
 # HuggingFace download (activate once application_train_dated.csv is uploaded):
@@ -40,7 +41,7 @@ spark.sparkContext.setLogLevel("ERROR")
 
 if __name__ == "__main__":
     logger.info("=" * 60)
-    logger.info("Home Credit Medallion Pipeline — Bronze → Silver")
+    logger.info("Home Credit Medallion Pipeline — Bronze → Silver → Gold")
     logger.info("=" * 60)
     logger.info(f"  DATA_DIR   : {config.DATA_DIR}")
     logger.info(f"  BRONZE_DIR : {config.BRONZE_DIR}")
@@ -72,15 +73,31 @@ if __name__ == "__main__":
         spark, config.BRONZE_DIR, config.SILVER_DIR
     )
 
+    # --- Gold layer ---
+    logger.info("\n[Pipeline] Starting Gold layer...")
+    gold_results = utils.data_processing_gold_table.run_gold_layer(
+        spark=spark,
+        silver_dir=config.SILVER_DIR,
+        gold_dir=config.GOLD_DIR,
+        oot_start=config.OOT_START,
+        train_frac=config.SPLIT_TRAIN,
+        val_frac=config.SPLIT_VAL,
+        seed=config.RANDOM_SEED,
+    )
+
     # --- Summary ---
     logger.info("\n" + "=" * 60)
     logger.info("Pipeline complete. Row count summary:")
-    logger.info(f"  {'Table':<20} {'Bronze':>10} {'Silver':>10}")
+    logger.info(f"\n  {'Table':<20} {'Bronze':>10} {'Silver':>10}")
     logger.info(f"  {'-'*20} {'-'*10} {'-'*10}")
     for name in bronze_results:
         logger.info(
             f"  {name:<20} {bronze_results[name]:>10,} {silver_results[name]:>10,}"
         )
+    logger.info(f"\n  {'Gold store/split':<30} {'Rows':>10}")
+    logger.info(f"  {'-'*30} {'-'*10}")
+    for store_split, cnt in sorted(gold_results.items()):
+        logger.info(f"  {store_split:<30} {cnt:>10,}")
     logger.info("=" * 60)
 
     spark.stop()

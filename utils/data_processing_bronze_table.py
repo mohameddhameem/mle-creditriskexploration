@@ -2,15 +2,17 @@ import os
 from pyspark.sql import SparkSession
 import config
 
+
 def _bronze_path(bronze_dir: str, table_name: str) -> str:
     return os.path.join(bronze_dir, table_name)
 
+
 def process_bronze_table(
-    spark: SparkSession,
-    table_name: str,
-    source_path: str,
-    bronze_dir: str,
-    primary_key: str | None = None,
+        spark: SparkSession,
+        table_name: str,
+        source_path: str,
+        bronze_dir: str,
+        primary_key: str | None = None,
 ) -> int:
     """Reads a raw source file and writes it as Parquet to the Bronze layer."""
     df = spark.read.parquet(source_path)
@@ -32,18 +34,19 @@ def process_bronze_table(
 
     return row_count
 
+
 def run_bronze_layer(spark: SparkSession, data_dir: str, bronze_dir: str) -> dict:
     """Ingests all source tables into the Bronze layer."""
     RAW_FILES = config.RAW_FILES
 
     primary_keys = {
-        "application":    "SK_ID_CURR",
-        "bureau":         "SK_ID_BUREAU",
+        "application": "SK_ID_CURR",
+        "bureau": "SK_ID_BUREAU",
         "bureau_balance": None,
-        "previous_app":   "SK_ID_PREV",
-        "pos_cash":       None,
-        "installments":   None,
-        "credit_card":    None,
+        "previous_app": "SK_ID_PREV",
+        "pos_cash": None,
+        "installments": None,
+        "credit_card": None,
     }
 
     results = {}

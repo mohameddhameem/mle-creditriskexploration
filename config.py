@@ -18,7 +18,7 @@ GOLD_DIR   = os.path.join(_REPO_ROOT, "datamart", "gold")
 # Source file names
 # ---------------------------------------------------------------------------
 RAW_FILES = {
-    "application":    "application_train.parquet",
+    "application":    "application_train_dated.parquet",
     "bureau":         "bureau.parquet",
     "bureau_balance": "bureau_balance.parquet",
     "previous_app":   "previous_application.parquet",

@@ -1,12 +1,3 @@
-# =============================================================================
-# config.py
-# Central configuration for the Home Credit medallion pipeline.
-#
-# Raw CSVs live in data/ inside the repo (gitignored).
-# Option A (HuggingFace): download_dataset.py populates data/ automatically.
-# Option B (local): CSVs are placed manually into data/ — see main.py.
-# =============================================================================
-
 import os
 
 # ---------------------------------------------------------------------------

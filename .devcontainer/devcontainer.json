@@ -1,0 +1,31 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/debian
+{
+	"name": "Credit Risk Project",
+	// Use the Dockerfile in the .devcontainer directory
+	"build": {
+		"dockerfile": "../Dockerfile",
+		"context": ".."
+	},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [8888],
+
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {}
+	},
+
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"extensions": ["ms-python.python"]
+		}
+	},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	"remoteUser": "root",
+	"containerEnv": {
+		"JAVA_HOME": "/usr/lib/jvm/java-17-openjdk-amd64",
+		"PYTHONUNBUFFERED": "1"
+	}
+}

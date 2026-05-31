@@ -1,9 +1,4 @@
 import os
-
-# ---------------------------------------------------------------------------
-# Paths
-# ---------------------------------------------------------------------------
-# Repo root is the same directory as this file
 _REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Raw CSVs — inside the repo, gitignored

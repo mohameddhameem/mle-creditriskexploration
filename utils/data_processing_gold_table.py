@@ -305,7 +305,7 @@ def _build_pos_cash_features(silver_pos_cash: DataFrame) -> DataFrame:
                 F.when(F.col("NAME_CONTRACT_STATUS") == "Completed", 1).otherwise(0)
             ).cast(IntegerType()).alias("pos_completed_loans"),
         )
-    )
+    )  
 
     # max DPD across all months
     all_agg = (

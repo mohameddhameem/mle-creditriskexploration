@@ -30,7 +30,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata
+      - name: Generate metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -40,7 +40,7 @@ jobs:
             type=sha,prefix={{branch}}-
             type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: Build and push Docker image
+      - name: Build and push image
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -50,7 +50,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Image pushed successfully
+      - name: Log image details
         run: |
-          echo "✅ Docker image built and pushed to ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
-          echo "Image tags: ${{ steps.meta.outputs.tags }}"
+          echo "Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
+          echo "Tags: ${{ steps.meta.outputs.tags }}"

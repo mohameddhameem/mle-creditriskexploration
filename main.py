@@ -10,8 +10,12 @@ import utils.data_processing_bronze_table
 import utils.data_processing_gold_table
 import utils.data_processing_silver_table
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s — %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
 logger = logging.getLogger(__name__)
-download_dataset.download_dataset(output_dir=config.DATA_DIR)
 
 spark = pyspark.sql.SparkSession.builder \
     .appName("HomeCredit-Medallion-Pipeline") \
@@ -23,6 +27,8 @@ spark = pyspark.sql.SparkSession.builder \
 spark.sparkContext.setLogLevel("ERROR")
 
 if __name__ == "__main__":
+    download_dataset.download_dataset(output_dir=config.DATA_DIR)
+
     if not os.path.isdir(config.DATA_DIR):
         sys.exit(1)
 

@@ -20,6 +20,10 @@ _MODE_TRIPLICATE_COLS = [
     "LIVINGAREA_MODE", "NONLIVINGAPARTMENTS_MODE", "NONLIVINGAREA_MODE",
 ]
 
+# Documents 2,4,5,7,9-21 have near-zero variance in the training population
+# (submission rate < 1%) so they add noise without signal.
+# Documents 3, 6, 8 are retained as they show meaningful submission rates
+# and correlation with default in EDA.
 _FLAG_DOCUMENT_DROP = [
     "FLAG_DOCUMENT_2", "FLAG_DOCUMENT_4", "FLAG_DOCUMENT_5",
     "FLAG_DOCUMENT_7", "FLAG_DOCUMENT_9", "FLAG_DOCUMENT_10",
@@ -29,6 +33,7 @@ _FLAG_DOCUMENT_DROP = [
     "FLAG_DOCUMENT_20", "FLAG_DOCUMENT_21",
 ]
 
+# FLAG_MOBIL and FLAG_CONT_MOBILE are 1 for virtually every applicant (zero variance).
 _ZERO_VARIANCE_FLAGS = [
     "FLAG_MOBIL",
     "FLAG_CONT_MOBILE",

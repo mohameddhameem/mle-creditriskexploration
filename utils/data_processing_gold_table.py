@@ -537,8 +537,6 @@ def run_gold_layer(
         val_frac=val_frac,
         seed=seed,
     )
-    for name, sdf in splits.items():
-        logger.info(f"[Gold]   {name}: {sdf.count():,} rows")
 
     # -- feature_store: SK_ID_CURR + all features (no TARGET, no application_date) --
     feature_cols = [c for c in gold.columns if c not in ("TARGET", "application_date")]

@@ -4,9 +4,9 @@ FROM python:3.12-slim
 # Set non-interactive mode for apt-get
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install Java (OpenJDK 17 headless), procps (for 'ps') and bash
+# Install Java (OpenJDK 17 headless), procps (for 'ps'), bash, build tools, and cmake
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends default-jdk-headless procps bash && \
+    apt-get install -y --no-install-recommends default-jdk-headless procps bash build-essential cmake && \
     rm -rf /var/lib/apt/lists/* && \
     # Ensure Spark’s scripts run with bash instead of dash
     ln -sf /bin/bash /bin/sh && \

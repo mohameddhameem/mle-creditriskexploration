@@ -1,8 +1,7 @@
 import logging
 import os
-import sys
-
 import pyspark
+import sys
 
 import config
 import download_dataset

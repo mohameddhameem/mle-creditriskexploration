@@ -7,7 +7,8 @@ DATA_DIR = os.path.join(_REPO_ROOT, "data")
 # Output directories for each medallion layer (inside repo, gitignored)
 BRONZE_DIR = os.path.join(_REPO_ROOT, "datamart", "bronze")
 SILVER_DIR = os.path.join(_REPO_ROOT, "datamart", "silver")
-GOLD_DIR   = os.path.join(_REPO_ROOT, "datamart", "gold")
+GOLD_DIR         = os.path.join(_REPO_ROOT, "datamart", "gold")
+PREDICTIONS_DIR  = os.path.join(_REPO_ROOT, "datamart", "predictions")
 
 # ---------------------------------------------------------------------------
 # Source file names

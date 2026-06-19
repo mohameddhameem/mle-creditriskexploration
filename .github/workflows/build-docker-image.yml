@@ -52,5 +52,5 @@ jobs:
 
       - name: Image pushed successfully
         run: |
-          echo "✅ Docker image built and pushed to ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
+          echo "Docker image built and pushed to ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
           echo "Image tags: ${{ steps.meta.outputs.tags }}"

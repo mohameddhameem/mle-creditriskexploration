@@ -44,3 +44,17 @@ pip install -r requirements.txt
 Dataset from Kaggle competition. Used for educational purposes under CC-BY-4.0 license.
 
 See the [Kaggle competition page](https://www.kaggle.com/competitions/home-credit-default-risk) for more details.
+
+## Running the Inference API
+
+Start the API:
+```bash
+docker compose up -d api
+```
+
+Query predictions:
+```bash
+curl -X POST http://localhost:8000/predict \
+  -H "Content-Type: application/json" \
+  -d '{"inputs": {"EXT_SOURCE_2": 0.65, "EXT_SOURCE_3": 0.52}}'
+```

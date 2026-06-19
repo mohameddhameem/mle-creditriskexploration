@@ -1,3 +1,13 @@
+---
+title: Home Credit Default Risk API
+emoji: 💳
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_port: 8000
+pinned: false
+---
+
 # Home Credit Default Risk
 
 A dataset for learning about credit default prediction.

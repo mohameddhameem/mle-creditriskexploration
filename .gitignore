@@ -103,3 +103,4 @@ Thumbs.db
 *.pt
 *.pth
 datamart/
+models/

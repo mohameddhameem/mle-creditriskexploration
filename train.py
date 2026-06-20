@@ -45,7 +45,12 @@ def encode_categoricals(df: pd.DataFrame, encoders: dict = None, fit: bool = Fal
         df[col] = df[col].astype(str).fillna("missing")
         if fit:
             le = LabelEncoder()
-            df[col] = le.fit_transform(df[col])
+            # Ensure "missing" is always in the encoder's classes
+            unique_vals = list(df[col].unique())
+            if "missing" not in unique_vals:
+                unique_vals.append("missing")
+            le.classes_ = np.array(unique_vals)
+            df[col] = le.transform(df[col])
             encoders[col] = le
         else:
             le = encoders[col]

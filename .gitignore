@@ -8,7 +8,7 @@
 *.xlsx
 *.xls
 *.pickle
-*.pkl
+
 *.feather
 *.h5
 *.hdf5
@@ -96,11 +96,10 @@ Thumbs.db
 *~
 
 # Model files (if applicable)
-*.pkl
+
 *.joblib
 *.model
 *.h5
 *.pt
 *.pth
 datamart/
-models/

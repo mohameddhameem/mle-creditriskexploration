@@ -68,3 +68,15 @@ curl -X POST http://localhost:8000/predict \
   -H "Content-Type: application/json" \
   -d '{"inputs": {"EXT_SOURCE_2": 0.65, "EXT_SOURCE_3": 0.52}}'
 ```
+
+## CI Deployment (GHCR -> DigitalOcean)
+
+Workflow file: `.github/workflows/deploy-do.yml`
+
+Required GitHub repository secrets:
+- `DIGITALOCEAN_ACCESS_TOKEN`
+- `DO_APP_ID`
+
+What happens on push to `main`:
+- Builds and pushes API image to GHCR.
+- Triggers a new DigitalOcean App Platform deployment via doctl.

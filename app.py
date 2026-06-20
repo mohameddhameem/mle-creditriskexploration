@@ -165,7 +165,13 @@ def read_root():
 @app.get("/health")
 def health():
     if not models or not encoders or not feature_names:
-        raise HTTPException(status_code=503, detail="Models or encoders not loaded properly.")
+        return {
+            "status": "degraded",
+            "timestamp": latest_ts,
+            "features_count": len(feature_names),
+            "available_models": list(models.keys()),
+            "detail": "Models or encoders are not loaded yet."
+        }
     return {
         "status": "healthy",
         "timestamp": latest_ts,

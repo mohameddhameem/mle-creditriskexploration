@@ -49,6 +49,7 @@ data.zip
 *.csv
 *.parquet
 *.json
+!models/metadata_*.json
 spark-warehouse/
 metastore_db/
 derby.log

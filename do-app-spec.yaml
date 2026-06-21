@@ -18,6 +18,12 @@ services:
     instance_size_slug: basic-xxs # 512 MB RAM, 1 vCPU ($5.00/mo)
     routes:
       - path: /
+    health_check:
+      http_path: /health
+      initial_delay_seconds: 45
+      period_seconds: 15
+      timeout_seconds: 5
+      failure_threshold: 5
     envs:
       - key: DATABASE_URL
         scope: RUN_TIME
@@ -36,6 +42,12 @@ services:
     instance_size_slug: basic-xxs # 512 MB RAM, 1 vCPU ($5.00/mo)
     routes:
       - path: /airflow
+    health_check:
+      http_path: /airflow/health
+      initial_delay_seconds: 120
+      period_seconds: 15
+      timeout_seconds: 5
+      failure_threshold: 6
     envs:
       - key: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
         scope: RUN_TIME
@@ -92,7 +104,7 @@ jobs:
       registry: OWNER_PLACEHOLDER
       repository: REPO_PLACEHOLDER
       tag: TAG_PLACEHOLDER
-    run_command: airflow db migrate
+    run_command: /bin/bash -c "airflow db migrate && (airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com || true)"
     kind: PRE_DEPLOY
     instance_count: 1
     instance_size_slug: basic-xxs

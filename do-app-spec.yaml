@@ -8,7 +8,8 @@ services:
   - name: creditrisk-api
     image:
       registry_type: GHCR
-      repository: mohameddhameem/CreditRiskProject # Replace with your GitHub repository owner/name
+      registry: OWNER_PLACEHOLDER
+      repository: REPO_PLACEHOLDER
       tag: latest
     run_command: uvicorn app:app --host 0.0.0.0 --port 8000
     http_port: 8000
@@ -25,7 +26,8 @@ services:
   - name: airflow-webserver
     image:
       registry_type: GHCR
-      repository: mohameddhameem/CreditRiskProject # Replace with your GitHub repository owner/name
+      registry: OWNER_PLACEHOLDER
+      repository: REPO_PLACEHOLDER
       tag: latest
     run_command: airflow webserver --port 8080
     http_port: 8080
@@ -53,7 +55,8 @@ workers:
   - name: airflow-scheduler
     image:
       registry_type: GHCR
-      repository: mohameddhameem/CreditRiskProject # Replace with your GitHub repository owner/name
+      registry: OWNER_PLACEHOLDER
+      repository: REPO_PLACEHOLDER
       tag: latest
     run_command: airflow scheduler
     instance_count: 1

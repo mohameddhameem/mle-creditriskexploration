@@ -67,6 +67,10 @@ jobs:
 
       - name: Update App Spec and deploy
         run: |
-          # Dynamically replace registry repository path with the current GitHub repository
-          sed -i "s|mohameddhameem/CreditRiskProject|${{ github.repository }}|g" do-app-spec.yaml
+          # Split repository path into owner and repo name
+          OWNER=$(echo "${{ github.repository }}" | cut -d'/' -f1 | tr '[:upper:]' '[:lower:]')
+          REPO=$(echo "${{ github.repository }}" | cut -d'/' -f2 | tr '[:upper:]' '[:lower:]')
+          # Dynamically replace placeholders in App Spec
+          sed -i "s|OWNER_PLACEHOLDER|$OWNER|g" do-app-spec.yaml
+          sed -i "s|REPO_PLACEHOLDER|$REPO|g" do-app-spec.yaml
           doctl apps update ${{ secrets.DO_APP_ID }} --spec do-app-spec.yaml

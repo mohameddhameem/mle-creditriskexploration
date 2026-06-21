@@ -11,7 +11,8 @@ services:
       registry: OWNER_PLACEHOLDER
       repository: REPO_PLACEHOLDER
       tag: latest
-    run_command: uvicorn app:app --app-dir /opt/airflow --host 0.0.0.0 --port 8000
+    # Debug-enhanced run command: prints full Python traceback if import fails
+    run_command: python -c "import app" && uvicorn app:app --app-dir /opt/airflow --host 0.0.0.0 --port 8000
     http_port: 8000
     instance_count: 1
     instance_size_slug: basic-xxs # 512 MB RAM, 1 vCPU ($5.00/mo)
@@ -82,6 +83,26 @@ workers:
       - key: AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL
         scope: RUN_TIME
         value: "30" # Parse files every 30 seconds instead of continuously, reducing CPU load
+
+jobs:
+  # Component 4: Pre-Deploy Database Migration (Runs airflow db migrate once before containers update)
+  - name: airflow-init
+    image:
+      registry_type: GHCR
+      registry: OWNER_PLACEHOLDER
+      repository: REPO_PLACEHOLDER
+      tag: latest
+    run_command: airflow db migrate
+    type: PRE_DEPLOY
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    envs:
+      - key: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
+        scope: RUN_TIME
+        value: ${db.DATABASE_URL}
+      - key: AIRFLOW__CORE__FERNET_KEY
+        scope: RUN_TIME
+        value: PAqBeGJLJTYFzVkOGHWIYXdLO7XdXz5yTdxAGJe9ezM=
 
 databases:
   # Managed PostgreSQL metadata database for Airflow and App storage

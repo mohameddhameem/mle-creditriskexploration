@@ -49,6 +49,10 @@ services:
       - key: AIRFLOW__WEBSERVER__WORKERS
         scope: RUN_TIME
         value: "1" # Limit to 1 gunicorn worker to save ~200MB RAM
+      # Subpath routing configuration
+      - key: AIRFLOW__WEBSERVER__BASE_URL
+        scope: RUN_TIME
+        value: ${APP_URL}/airflow
 
 workers:
   # Component 3: The Airflow Scheduler

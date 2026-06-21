@@ -20,7 +20,7 @@ services:
     envs:
       - key: DATABASE_URL
         scope: RUN_TIME
-        value: ${db.connection_string}
+        value: ${db.DATABASE_URL}
 
   # Component 2: The Airflow Webserver Dashboard
   - name: airflow-webserver
@@ -38,7 +38,7 @@ services:
     envs:
       - key: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
         scope: RUN_TIME
-        value: ${db.connection_string}
+        value: ${db.DATABASE_URL}
       - key: AIRFLOW__CORE__FERNET_KEY
         scope: RUN_TIME
         value: PAqBeGJLJTYFzVkOGHWIYXdLO7XdXz5yTdxAGJe9ezM=
@@ -68,7 +68,7 @@ workers:
     envs:
       - key: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
         scope: RUN_TIME
-        value: ${db.connection_string}
+        value: ${db.DATABASE_URL}
       - key: AIRFLOW__CORE__FERNET_KEY
         scope: RUN_TIME
         value: PAqBeGJLJTYFzVkOGHWIYXdLO7XdXz5yTdxAGJe9ezM=

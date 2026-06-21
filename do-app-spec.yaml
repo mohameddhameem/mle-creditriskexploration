@@ -93,7 +93,7 @@ jobs:
       repository: REPO_PLACEHOLDER
       tag: latest
     run_command: airflow db migrate
-    type: PRE_DEPLOY
+    kind: PRE_DEPLOY
     instance_count: 1
     instance_size_slug: basic-xxs
     envs:

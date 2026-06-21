@@ -7,7 +7,7 @@ services:
   # Component 1: The FastAPI serving API
   - name: creditrisk-api
     image:
-      registry_type: ghcr
+      registry_type: GHCR
       repository: mohameddhameem/CreditRiskProject # Replace with your GitHub repository owner/name
       tag: latest
     run_command: uvicorn app:app --host 0.0.0.0 --port 8000
@@ -24,7 +24,7 @@ services:
   # Component 2: The Airflow Webserver Dashboard
   - name: airflow-webserver
     image:
-      registry_type: ghcr
+      registry_type: GHCR
       repository: mohameddhameem/CreditRiskProject # Replace with your GitHub repository owner/name
       tag: latest
     run_command: airflow webserver --port 8080
@@ -52,7 +52,7 @@ workers:
   # Component 3: The Airflow Scheduler
   - name: airflow-scheduler
     image:
-      registry_type: ghcr
+      registry_type: GHCR
       repository: mohameddhameem/CreditRiskProject # Replace with your GitHub repository owner/name
       tag: latest
     run_command: airflow scheduler

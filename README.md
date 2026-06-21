@@ -69,6 +69,26 @@ curl -X POST http://localhost:8000/predict \
   -d '{"inputs": {"EXT_SOURCE_2": 0.65, "EXT_SOURCE_3": 0.52}}'
 ```
 
+## Airflow & Model Monitoring Setup
+
+An end-to-end model training, inference, and monitoring pipeline is orchestrated using Apache Airflow.
+
+### 1. Starting the Airflow Stack
+Start all Airflow services along with the Jupyter and API containers:
+```bash
+docker compose up --build -d
+```
+Access the Airflow Web UI at [http://localhost:8080](http://localhost:8080) (Credentials: `admin`/`admin`).
+
+### 2. DAG Orchestration
+The DAG `ml_credit_risk_pipeline` is scheduled **monthly** for the year 2020 (the Out-of-Time split window) with `catchup=True` to simulate a full year of production scoring and monitoring:
+1. **`model_train`**: Runs model training on the historical 2018-2019 split.
+2. **`model_inference`**: Scores applications booked during the current execution month and saves predictions to `datamart/predictions/YYYY-MM-DD/`.
+3. **`model_monitor`**: Looks back 6 months to evaluate realized model performance (ROC-AUC) against ground-truth labels. It also calculates Population Stability Index (PSI) to detect drift in prediction distributions and top features (`EXT_SOURCE_2`, `EXT_SOURCE_3`, `CODE_GENDER`, `NAME_EDUCATION_TYPE`, `cc_utilisation`).
+
+### 3. Monitoring Results
+Monitoring metrics are saved monthly as Parquet files under `datamart/gold/model_monitoring/monitor_YYYY_MM_DD.parquet`.
+
 ## CI Deployment (GHCR -> DigitalOcean)
 
 Workflow file: `.github/workflows/deploy-do.yml`
@@ -80,3 +100,4 @@ Required GitHub repository secrets:
 What happens on push to `main`:
 - Builds and pushes API image to GHCR.
 - Triggers a new DigitalOcean App Platform deployment via doctl.
+

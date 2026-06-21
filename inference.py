@@ -72,8 +72,8 @@ def select_champion(model_arg: str) -> tuple:
     champion = {
         "model_name":       model_name,
         "model_version":    ts,
-        "pkl_path":         os.path.join(MODEL_DIR, f"{model_name}_{ts}.pkl"),
-        "encoders_path":    os.path.join(MODEL_DIR, f"encoders_{ts}.pkl"),
+        "pkl_path":         os.path.join("models", f"{model_name}_{ts}.pkl"),
+        "encoders_path":    os.path.join("models", f"encoders_{ts}.pkl"),
         "selection_metric": "oot_auc",
         "selected_value":   oot_auc,
     }

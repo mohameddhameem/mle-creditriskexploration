@@ -29,17 +29,17 @@ services:
         scope: RUN_TIME
         value: ${db.DATABASE_URL}
 
-  # Component 2: The Airflow Webserver Dashboard
-  - name: airflow-webserver
+  # Component 2: Unified Airflow (Webserver + Scheduler in 1GB RAM)
+  - name: airflow
     image:
       registry_type: GHCR
       registry: OWNER_PLACEHOLDER
       repository: REPO_PLACEHOLDER
       tag: TAG_PLACEHOLDER
-    run_command: airflow webserver --port 8080
+    run_command: /bin/bash -c "airflow scheduler & airflow webserver --port 8080"
     http_port: 8080
     instance_count: 1
-    instance_size_slug: basic-xxs # 512 MB RAM, 1 vCPU ($5.00/mo)
+    instance_size_slug: basic-xs # 1 GB RAM, 1 vCPU ($10.00/mo)
     routes:
       - path: /airflow
     health_check:
@@ -66,28 +66,6 @@ services:
       - key: AIRFLOW__WEBSERVER__BASE_URL
         scope: RUN_TIME
         value: ${APP_URL}/airflow
-
-workers:
-  # Component 3: The Airflow Scheduler
-  - name: airflow-scheduler
-    image:
-      registry_type: GHCR
-      registry: OWNER_PLACEHOLDER
-      repository: REPO_PLACEHOLDER
-      tag: TAG_PLACEHOLDER
-    run_command: airflow scheduler
-    instance_count: 1
-    instance_size_slug: basic-xxs # 512 MB RAM, 1 vCPU ($5.00/mo)
-    envs:
-      - key: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
-        scope: RUN_TIME
-        value: ${db.DATABASE_URL}
-      - key: AIRFLOW__CORE__FERNET_KEY
-        scope: RUN_TIME
-        value: PAqBeGJLJTYFzVkOGHWIYXdLO7XdXz5yTdxAGJe9ezM=
-      - key: AIRFLOW__CORE__EXECUTOR
-        scope: RUN_TIME
-        value: LocalExecutor
       # Low-memory & CPU Scheduler optimization
       - key: AIRFLOW__SCHEDULER__PARSING_PROCESSES
         scope: RUN_TIME

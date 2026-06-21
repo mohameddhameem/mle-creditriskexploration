@@ -5,10 +5,10 @@ services:
     ports:
       - "8888:8888"
     volumes:
-      - .:/app
+      - .:/opt/airflow
     environment:
       - JUPYTER_ENABLE_LAB=yes
-    command: [ "jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--notebook-dir=/app", "--ServerApp.token=''", "--ServerApp.disable_check_xsrf=True" ]
+    command: [ "jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--notebook-dir=/opt/airflow", "--ServerApp.token=''", "--ServerApp.disable_check_xsrf=True" ]
 
   api:
     build: .
@@ -16,13 +16,11 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - .:/app
+      - .:/opt/airflow
     command: [ "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
 
   airflow-init:
-    build:
-      context: .
-      dockerfile: Dockerfile.airflow
+    build: .
     user: "root"
     environment:
       - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
@@ -50,9 +48,7 @@ services:
       echo '========================================================================'"
 
   airflow-webserver:
-    build:
-      context: .
-      dockerfile: Dockerfile.airflow
+    build: .
     depends_on:
       - airflow-init
     environment:
@@ -76,9 +72,7 @@ services:
     command: webserver
 
   airflow-scheduler:
-    build:
-      context: .
-      dockerfile: Dockerfile.airflow
+    build: .
     depends_on:
       - airflow-init
     environment:

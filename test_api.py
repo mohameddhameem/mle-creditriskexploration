@@ -36,7 +36,8 @@ def test_api():
     print(f"Health Check Response: {res.json()}")
 
     # 2. Get a sample row from the gold test split to use as request payload
-    gold_test_dir = "/app/datamart/gold/feature_store/test"
+    REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
+    gold_test_dir = os.path.join(REPO_ROOT, "datamart", "gold", "feature_store", "test")
     parquet_files = glob.glob(os.path.join(gold_test_dir, "*.parquet"))
 
     if not parquet_files:

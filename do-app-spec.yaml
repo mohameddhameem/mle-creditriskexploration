@@ -24,79 +24,74 @@ services:
       period_seconds: 15
       timeout_seconds: 5
       failure_threshold: 5
-    envs:
-      - key: DATABASE_URL
-        scope: RUN_TIME
-        value: ${db.DATABASE_URL}
-
-  # Component 2: Unified Airflow (Webserver + Scheduler in 1GB RAM)
-  - name: airflow
-    image:
-      registry_type: GHCR
-      registry: OWNER_PLACEHOLDER
-      repository: REPO_PLACEHOLDER
-      tag: TAG_PLACEHOLDER
-    run_command: /bin/bash -c "airflow scheduler & airflow webserver --port 8080"
-    http_port: 8080
-    instance_count: 1
-    instance_size_slug: basic-xs # 1 GB RAM, 1 vCPU ($10.00/mo)
-    routes:
-      - path: /airflow
-    health_check:
-      http_path: /airflow/health
-      initial_delay_seconds: 120
-      period_seconds: 15
-      timeout_seconds: 5
-      failure_threshold: 6
-    envs:
-      - key: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
-        scope: RUN_TIME
-        value: ${db.DATABASE_URL}
-      - key: AIRFLOW__CORE__FERNET_KEY
-        scope: RUN_TIME
-        value: PAqBeGJLJTYFzVkOGHWIYXdLO7XdXz5yTdxAGJe9ezM=
-      - key: AIRFLOW__CORE__EXECUTOR
-        scope: RUN_TIME
-        value: LocalExecutor
-      # Low-memory Webserver optimization
-      - key: AIRFLOW__WEBSERVER__WORKERS
-        scope: RUN_TIME
-        value: "1" # Limit to 1 gunicorn worker to save ~200MB RAM
-      # Subpath routing configuration
-      - key: AIRFLOW__WEBSERVER__BASE_URL
-        scope: RUN_TIME
-        value: ${APP_URL}/airflow
-      # Low-memory & CPU Scheduler optimization
-      - key: AIRFLOW__SCHEDULER__PARSING_PROCESSES
-        scope: RUN_TIME
-        value: "1" # Limit to 1 parsing thread instead of default 2+ (saves ~150MB RAM)
-      - key: AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL
-        scope: RUN_TIME
-        value: "30" # Parse files every 30 seconds instead of continuously, reducing CPU load
-
-jobs:
-  # Component 4: Pre-Deploy Database Migration (Runs airflow db migrate once before containers update)
-  - name: airflow-init
-    image:
-      registry_type: GHCR
-      registry: OWNER_PLACEHOLDER
-      repository: REPO_PLACEHOLDER
-      tag: TAG_PLACEHOLDER
-    run_command: /bin/bash -c "airflow db migrate && (airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com || true)"
-    kind: PRE_DEPLOY
-    instance_count: 1
-    instance_size_slug: basic-xxs
-    envs:
-      - key: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
-        scope: RUN_TIME
-        value: ${db.DATABASE_URL}
-      - key: AIRFLOW__CORE__FERNET_KEY
-        scope: RUN_TIME
-        value: PAqBeGJLJTYFzVkOGHWIYXdLO7XdXz5yTdxAGJe9ezM=
-
-databases:
-  # Managed PostgreSQL metadata database for Airflow and App storage
-  - engine: PG
-    name: db
-    version: "15"
-    size: db-s-dev-database # Cost-effective dev tier database ($7.00/mo)
+#  # Component 2: Unified Airflow (Webserver + Scheduler in 1GB RAM)
+#  - name: airflow
+#    image:
+#      registry_type: GHCR
+#      registry: OWNER_PLACEHOLDER
+#      repository: REPO_PLACEHOLDER
+#      tag: TAG_PLACEHOLDER
+#    run_command: /bin/bash -c "airflow scheduler & airflow webserver --port 8080"
+#    http_port: 8080
+#    instance_count: 1
+#    instance_size_slug: basic-xs # 1 GB RAM, 1 vCPU ($10.00/mo)
+#    routes:
+#      - path: /airflow
+#    health_check:
+#      http_path: /airflow/health
+#      initial_delay_seconds: 120
+#      period_seconds: 15
+#      timeout_seconds: 5
+#      failure_threshold: 6
+#    envs:
+#      - key: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
+#        scope: RUN_TIME
+#        value: ${db.DATABASE_URL}
+#      - key: AIRFLOW__CORE__FERNET_KEY
+#        scope: RUN_TIME
+#        value: PAqBeGJLJTYFzVkOGHWIYXdLO7XdXz5yTdxAGJe9ezM=
+#      - key: AIRFLOW__CORE__EXECUTOR
+#        scope: RUN_TIME
+#        value: LocalExecutor
+#      # Low-memory Webserver optimization
+#      - key: AIRFLOW__WEBSERVER__WORKERS
+#        scope: RUN_TIME
+#        value: "1" # Limit to 1 gunicorn worker to save ~200MB RAM
+#      # Subpath routing configuration
+#      - key: AIRFLOW__WEBSERVER__BASE_URL
+#        scope: RUN_TIME
+#        value: ${APP_URL}/airflow
+#      # Low-memory & CPU Scheduler optimization
+#      - key: AIRFLOW__SCHEDULER__PARSING_PROCESSES
+#        scope: RUN_TIME
+#        value: "1" # Limit to 1 parsing thread instead of default 2+ (saves ~150MB RAM)
+#      - key: AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL
+#        scope: RUN_TIME
+#        value: "30" # Parse files every 30 seconds instead of continuously, reducing CPU load
+#
+#jobs:
+#  # Component 4: Pre-Deploy Database Migration (Runs airflow db migrate once before containers update)
+#  - name: airflow-init
+#    image:
+#      registry_type: GHCR
+#      registry: OWNER_PLACEHOLDER
+#      repository: REPO_PLACEHOLDER
+#      tag: TAG_PLACEHOLDER
+#    run_command: /bin/bash -c "airflow db migrate && (airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com || true)"
+#    kind: PRE_DEPLOY
+#    instance_count: 1
+#    instance_size_slug: basic-xxs
+#    envs:
+#      - key: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
+#        scope: RUN_TIME
+#        value: ${db.DATABASE_URL}
+#      - key: AIRFLOW__CORE__FERNET_KEY
+#        scope: RUN_TIME
+#        value: PAqBeGJLJTYFzVkOGHWIYXdLO7XdXz5yTdxAGJe9ezM=
+#
+#databases:
+#  # Managed PostgreSQL metadata database for Airflow and App storage
+#  - engine: PG
+#    name: db
+#    version: "15"
+#    size: db-s-dev-database # Cost-effective dev tier database ($7.00/mo)

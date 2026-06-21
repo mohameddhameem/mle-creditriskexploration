@@ -29,3 +29,6 @@ USER airflow
 
 # Install Python dependencies from requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the project files into the container, ensuring correct ownership
+COPY --chown=airflow:root . /opt/airflow

@@ -40,6 +40,7 @@ jobs:
             type=ref,event=branch
             type=sha,prefix={{branch}}-
             type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=${{ github.sha }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
@@ -73,4 +74,5 @@ jobs:
           # Dynamically replace placeholders in App Spec
           sed -i "s|OWNER_PLACEHOLDER|$OWNER|g" do-app-spec.yaml
           sed -i "s|REPO_PLACEHOLDER|$REPO|g" do-app-spec.yaml
+          sed -i "s|TAG_PLACEHOLDER|${{ github.sha }}|g" do-app-spec.yaml
           doctl apps update ${{ secrets.DO_APP_ID }} --spec do-app-spec.yaml

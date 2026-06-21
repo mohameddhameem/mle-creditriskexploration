@@ -10,7 +10,7 @@ services:
       registry_type: GHCR
       registry: OWNER_PLACEHOLDER
       repository: REPO_PLACEHOLDER
-      tag: latest
+      tag: TAG_PLACEHOLDER
     # Debug-enhanced run command: prints full Python traceback if import fails
     run_command: /bin/bash -c "cd /opt/airflow && python -c 'import app' && uvicorn app:app --host 0.0.0.0 --port 8000"
     http_port: 8000
@@ -29,7 +29,7 @@ services:
       registry_type: GHCR
       registry: OWNER_PLACEHOLDER
       repository: REPO_PLACEHOLDER
-      tag: latest
+      tag: TAG_PLACEHOLDER
     run_command: airflow webserver --port 8080
     http_port: 8080
     instance_count: 1
@@ -62,7 +62,7 @@ workers:
       registry_type: GHCR
       registry: OWNER_PLACEHOLDER
       repository: REPO_PLACEHOLDER
-      tag: latest
+      tag: TAG_PLACEHOLDER
     run_command: airflow scheduler
     instance_count: 1
     instance_size_slug: basic-xxs # 512 MB RAM, 1 vCPU ($5.00/mo)
@@ -91,7 +91,7 @@ jobs:
       registry_type: GHCR
       registry: OWNER_PLACEHOLDER
       repository: REPO_PLACEHOLDER
-      tag: latest
+      tag: TAG_PLACEHOLDER
     run_command: airflow db migrate
     kind: PRE_DEPLOY
     instance_count: 1

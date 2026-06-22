@@ -1,6 +1,8 @@
 services:
   jupyter:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.app
     container_name: jupyter_lab
     ports:
       - "8888:8888"
@@ -8,16 +10,52 @@ services:
       - .:/opt/airflow
     environment:
       - JUPYTER_ENABLE_LAB=yes
-    command: [ "jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--notebook-dir=/opt/airflow", "--ServerApp.token=''", "--ServerApp.disable_check_xsrf=True" ]
+    command:
+      - jupyter
+      - lab
+      - --ip=0.0.0.0
+      - --port=8888
+      - --no-browser
+      - --allow-root
+      - --notebook-dir=/opt/airflow
+      - --ServerApp.token=
+      - --ServerApp.disable_check_xsrf=True
 
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.app
     container_name: credit_risk_api
     ports:
       - "8000:8000"
     volumes:
       - .:/opt/airflow
-    command: [ "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
+    command:
+      - uvicorn
+      - app:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+      - --reload
+
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+    container_name: credit_risk_ui
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/opt/airflow
+    depends_on:
+      - api
+    command:
+      - streamlit
+      - run
+      - ui.py
+      - --server.address=0.0.0.0
+      - --server.port=8501
 
   airflow-init:
     build: .

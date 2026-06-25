@@ -103,3 +103,8 @@ Thumbs.db
 *.pt
 *.pth
 datamart/
+airflow.db
+airflow.cfg
+logs/
+__pycache__/
+*.pkl
